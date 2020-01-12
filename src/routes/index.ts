@@ -1,10 +1,10 @@
-import parameter from './parameter';
+import globalParameter from './globalParameter';
 import game from './game';
 import * as express from 'express';
 
 export class Routes {
   public useRoutes(app: express.Application) {
-    app.use('/globalParams', parameter);
+    app.use('/globalParameters', globalParameter);
     app.use('/game', game);
   }
 }

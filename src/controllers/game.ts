@@ -1,16 +1,28 @@
 import { Game } from '../models/game';
+import { GlobalParameter } from '../models/globalParameter'
+import { Player } from '../models/player';
 import randomWords from 'random-words';
 
 async function createGame (req, res, next) {
   try {
     console.log(`Create game: ${req.body}`);
-    const gameName = req.body.name ? req.body.name : randomWords()
+    const gameName = req.body.gameName ? req.body.gameName : randomWords()
     const exists = await Game.findAll({ where: { name: gameName } })
     if(exists.length > 0) {
       res.status(409).json({ error: `Failed to create game with name ${gameName} because a game with that name already exists` })
       return;
     }
-    let game = await Game.create({ name: gameName })
+    if(!req.body.players) {
+      res.status(400).json({ error: `At least one player ({ name: xyz }) must be specified` })
+      return;
+    }
+    const game = await Game.create({ name: gameName })
+    await GlobalParameter.create({ param: 'oxygen', value: 0, game_id: game.id })
+    await GlobalParameter.create({ param: 'temperature', value: -30, game_id: game.id })
+    await GlobalParameter.create({ param: 'oceans', value: 9, game_id: game.id })
+    req.body.players.map(async (player, index) => {
+      await Player.create({ name: player.name ? player.name : `Player${index + 1}`, tr: 0, game_id: game.id })
+    })
     res.status(201).json(game);
   } catch (e) {
     next(e);
