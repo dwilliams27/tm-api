@@ -5,7 +5,6 @@ import randomWords from 'random-words';
 
 async function createGame (req, res, next) {
   try {
-    console.log(`Create game: ${req.body}`);
     const gameName = req.body.gameName ? req.body.gameName : randomWords()
     const exists = await Game.findAll({ where: { name: gameName } })
     if(exists.length > 0) {
