@@ -1,4 +1,4 @@
-import { Table, Model, Column, PrimaryKey, HasMany } from 'sequelize-typescript';
+import { Table, Model, Column, PrimaryKey, HasMany, Scopes } from 'sequelize-typescript';
 import { Player } from './player';
 import { GlobalParameter } from './globalParameter';
 

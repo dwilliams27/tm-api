@@ -5,6 +5,7 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "target": "es6",
+    "moduleResolution": "node",
   },
   "include": [
     "src/**/*.ts",
