@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import { GlobalParameter } from '../models/globalParameter'
 import Formatter from './Formatter'
-import { Mods } from './FType'
+import Output from './Output'
 const m = Formatter.m
 
 export default {
@@ -13,9 +13,9 @@ export default {
   async getParam (param: string, game_id: number) {
     return GlobalParameter.findOne({ where: { param, game_id } })
   },
-  async modifyParameter (param: string, newValue: number, game_id: number) {
+  async modifyParameter (param: string, newValue: number, game_id: number, level?: number) {
     const curVal = (await this.getParam(param, game_id)).value
-    console.log(`Global Parameter ${m(param, Mods.YELLOW)}: ${m(curVal, Mods.GREEN)} => ${m(newValue, Mods.GREEN)}`)
+    Output.log(`${m(param, Output.BOLD)}: ${m(curVal, Output.GREEN)} => ${m(newValue, Output.GREEN)}`, level)
     return GlobalParameter.update<GlobalParameter>({ param, value: newValue, game_id: game_id }, { where: { param, game_id } })
   }
 }

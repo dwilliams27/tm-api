@@ -1,17 +1,19 @@
 import { Game } from '../models/game'
 import Formatter from '../shared/Formatter'
-import { Mods } from '../shared/FType'
+import Output from './Output'
 import ParameterManager from '../shared/ParameterManager'
 const m = Formatter.m
 
-export default {
+const gm = {
   async getGameIdByName (name: string) {
     return (await Game.findOne({ where: { name } })).id
   },
   async createGame (name: string) {
-    console.log(`Creating game ${m(name, Mods.GREEN)}`)
+    Output.log(`Creating game ${m(name, Output.GREEN)}`, 0)
     const game = await Game.create({ name })
-    await ParameterManager.createParams(module.exports.getGameIdByName(name))
+    await ParameterManager.createParams(await gm.getGameIdByName(name))
     return game
   }
 }
+
+export default gm

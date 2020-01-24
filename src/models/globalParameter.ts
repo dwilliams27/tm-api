@@ -1,18 +1,19 @@
-import { Table, Model, Column, PrimaryKey, ForeignKey, BelongsTo } from 'sequelize-typescript';
-import { Game } from './game';
+/* eslint-disable camelcase */
+import { Table, Model, Column, ForeignKey, BelongsTo } from 'sequelize-typescript'
+import { Game } from './game'
 
 @Table
 export class GlobalParameter extends Model<GlobalParameter> {
   @Column
-  param: string;
+  param: string
 
   @Column
-  value: number;
+  value: number
 
   @ForeignKey(() => Game)
   @Column
-  game_id: number;
+  game_id: number
 
   @BelongsTo(() => Game)
-  game: Game;
+  game: Game
 }
