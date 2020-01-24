@@ -2,6 +2,7 @@ import { Game } from '../models/game';
 import { GlobalParameter } from '../models/globalParameter'
 import { Player } from '../models/player';
 import randomWords from 'random-words';
+import GameManager from '../shared/GameManager';
 
 async function createGame (req, res, next) {
   try {
@@ -15,10 +16,8 @@ async function createGame (req, res, next) {
       res.status(400).json({ error: `At least one player ({ name: xyz }) must be specified` })
       return;
     }
-    const game = await Game.create({ name: gameName })
-    await GlobalParameter.create({ param: 'oxygen', value: 0, game_id: game.id })
-    await GlobalParameter.create({ param: 'temperature', value: -30, game_id: game.id })
-    await GlobalParameter.create({ param: 'oceans', value: 9, game_id: game.id })
+    const game = await GameManager.createGame(gameName)
+    
     req.body.players.map(async (player, index) => {
       await Player.create({ name: player.name ? player.name : `Player${index + 1}`, tr: 0, game_id: game.id })
     })

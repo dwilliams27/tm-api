@@ -5,6 +5,12 @@ import PlayerManager from '../shared/PlayerManager';
 import GameManager from '../shared/GameManager';
 import ParameterManager from '../shared/ParameterManager';
 
+const PLimit = {
+  temperature: 8,
+  oxygen: 14,
+  oceans: 0
+}
+
 async function getGlobalParameter(req, res, next) {
   try {
     const { gameName, globalParameter } = req.body;
@@ -24,33 +30,26 @@ async function getGlobalParameter(req, res, next) {
 async function advanceGlobalParameter(req, res, next) {
   try {
     const { gameName, globalParameter, player, steps } = req.body;
-    if(!gameName || !globalParameter || !player) {
+    console.log(PLimit[globalParameter])
+    if(!globalParameter || PLimit[globalParameter] === undefined) {
+      res.status(400).json({ error: `Unrecognized global parameter. 'globalParameter' must be either 'oxygen', 'temperature', or 'oceans'` })
+      return; 
+    }
+    if(!gameName || !player) {
       res.status(400).json({ error: `Request did not contain necessary params; 'gameName', 'globalParameter', and 'player'` })
       return
     }
     const id = await GameManager.getGameIdByName(gameName)
-
-    switch(globalParameter) {
-      case "oxygen":
-        const curVal = (await ParameterManager.getParam(globalParameter, id)).value;
-        const incBy = steps ? Math.abs(steps) : 1;
-        if(curVal + incBy <= 14) {
-          await ParameterManager.modifyParameter(globalParameter, curVal + incBy, id)
-          await PlayerManager.addTr(player, id, incBy)
-          res.status(200).json({ globalParameter, value: curVal + incBy })
-        }
-        break;
-      case "temperature":
-        // todo
-        break;
-      case "oceans":
-        // todo
-        break;
-      default:
-        res.status(400).json({ error: `Unrecognized global parameter. 'globalParameter' must be either 'oxygen', 'temperature', or 'oceans'` })
-        return; 
+    const curVal = (await ParameterManager.getParam(globalParameter, id)).value;
+    const limit = PLimit[globalParameter]
+    let delta = steps ? Math.abs(steps) : (globalParameter === "temperature" ? 2 : 1);
+    if(globalParameter === "oceans") {
+      delta = (curVal + delta >= limit ? delta : limit);
+    } else {
+      delta = (curVal + delta <= limit ? delta : limit - curVal);
     }
-    await GlobalParameter.update<GlobalParameter>(req.body, { where: { game_id: req.body.gameName } });
+    await PlayerManager.addTr(player, id, delta)
+    res.status(200).json({ globalParameter, value: curVal + delta })
   } catch(e) {
     next(e);
   }
