@@ -1,7 +1,7 @@
 import { Game } from '../models/game'
 import randomWords from 'random-words'
-import GameManager from '../shared/GameManager'
-import PlayerManager from '../shared/PlayerManager'
+import GameManager from '../shared/managers/GameManager'
+import PlayerManager from '../shared/managers/PlayerManager'
 
 async function createGame (req, res, next) {
   try {
@@ -15,7 +15,7 @@ async function createGame (req, res, next) {
       res.status(400).json({ error: 'At least one player ({ name: xyz }) must be specified' })
       return
     }
-    const game = await GameManager.createGame(gameName)
+    const game = await GameManager.createGame(gameName, req.body.players)
 
     req.body.players.map(async (player, index) => {
       await PlayerManager.createPlayer(player.name ? player.name : `Player${index + 1}`, game.id)

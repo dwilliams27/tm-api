@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
-import { Player } from '../models/player'
-import Formatter from './Formatter'
-import Output from './Output'
+import { Player } from '../../models/player'
+import Formatter from '../Formatter'
+import Output from '../Output'
 const m = Formatter.m
 
 export default {

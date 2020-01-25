@@ -1,6 +1,6 @@
-import PlayerManager from '../shared/PlayerManager'
-import GameManager from '../shared/GameManager'
-import ParameterManager from '../shared/ParameterManager'
+import PlayerManager from '../shared/managers/PlayerManager'
+import GameManager from '../shared/managers/GameManager'
+import ParameterManager from '../shared/managers/ParameterManager'
 
 const PLimit = {
   temperature: 8,

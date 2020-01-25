@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
-import { GlobalParameter } from '../models/globalParameter'
-import Formatter from './Formatter'
-import Output from './Output'
+import { GlobalParameter } from '../../models/globalParameter'
+import Formatter from '../Formatter'
+import Output from '../Output'
 const m = Formatter.m
 
 export default {
