@@ -1,7 +1,7 @@
 import { Table, Model, Column, HasMany, HasOne } from 'sequelize-typescript'
 import { Player } from './player'
 import { GlobalParameter } from './globalParameter'
-import { Turn } from './turns'
+import { Turn } from './turn'
 
 @Table
 export class Game extends Model<Game> {

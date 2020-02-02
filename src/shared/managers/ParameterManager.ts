@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { GlobalParameter } from '../../models/globalParameter'
 import Formatter from '../Formatter'
 import Output from '../Output'

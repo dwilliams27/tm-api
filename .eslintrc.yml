@@ -12,4 +12,7 @@ parserOptions:
   sourceType: module
 plugins:
   - '@typescript-eslint'
-rules: {}
+rules:
+  no-unused-vars: off
+  no-new: off
+  camelcase: off
