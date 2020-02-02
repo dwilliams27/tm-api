@@ -2,6 +2,7 @@ import { Game } from '../models/game'
 import randomWords from 'random-words'
 import GameManager from '../shared/managers/GameManager'
 import PlayerManager from '../shared/managers/PlayerManager'
+import ResourceManager from '../shared/managers/ResourceManager'
 
 async function createGame (req, res, next) {
   try {
@@ -17,9 +18,10 @@ async function createGame (req, res, next) {
     }
     const game = await GameManager.createGame(gameName, req.body.players)
 
-    req.body.players.map(async (player, index) => {
+    await req.body.players.map(async (player, index) => {
       await PlayerManager.createPlayer(player.name ? player.name : `Player${index + 1}`, game.id)
     })
+
     res.status(201).json(game)
   } catch (e) {
     next(e)

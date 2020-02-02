@@ -1,17 +1,16 @@
 import { Turn } from '../../models/turn'
 import Formatter from '../Formatter'
 import Output from '../Output'
-import { Player } from '../types/Player'
+import { PlayerT } from '../types/PlayerT'
 const m = Formatter.m
 
 export default {
-  async initialize (players: Player[], game_id: number) {
+  async initialize (players: PlayerT[], game_id: number) {
     if (!players || !game_id) {
       return null
     }
     let turnOrder = ''
     players.map(player => { turnOrder += `${player}#` })
-    console.log(players[0])
     await Turn.create({ currentPlayer: players[0].name, turnOrder })
     Output.log(`Player ${m(players[0].name, Output.YELLOW)} turn`)
   },
