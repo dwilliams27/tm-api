@@ -1,6 +1,7 @@
 import PlayerManager from '../shared/managers/PlayerManager'
 import GameManager from '../shared/managers/GameManager'
 import ParameterManager from '../shared/managers/ParameterManager'
+import { GlobalParameter } from '../shared/types/GlobalParameter'
 
 const PLimit = {
   temperature: 8,
@@ -41,7 +42,7 @@ async function advanceGlobalParameter (req, res, next) {
     let trDelta = 0
     let delta = 0
 
-    if (globalParameter === 'temperature') {
+    if (globalParameter === GlobalParameter.TEMPERATURE) {
       if (steps % 2 !== 0) {
         res.status(400).json({ error: 'Can only raise temperature in steps of 2' })
         return
@@ -51,17 +52,13 @@ async function advanceGlobalParameter (req, res, next) {
       delta = steps ? Math.abs(steps) : 1
     }
 
-    if (globalParameter === 'oceans') {
+    if (globalParameter === GlobalParameter.OCEANS) {
       delta = (curVal - delta >= limit ? -delta : limit - curVal)
     } else {
       delta = (curVal + delta <= limit ? delta : limit - curVal)
     }
 
-    if (globalParameter === 'temperature') {
-      trDelta = delta / 2
-    } else {
-      trDelta = Math.abs(delta)
-    }
+    trDelta = (globalParameter === GlobalParameter.TEMPERATURE) ? delta / 2 : Math.abs(delta)
     await ParameterManager.modifyParameter(globalParameter, curVal + delta, id, 0)
     await PlayerManager.addTr(player, id, trDelta, 1)
     res.status(200).json({ globalParameter, value: curVal + delta })

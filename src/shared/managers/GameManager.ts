@@ -13,9 +13,9 @@ const gm = {
   async createGame (name: string, players: Player[]) {
     Output.log(`Creating game ${m(name, Output.GREEN)}`, 0)
     const game = await Game.create({ name, generation: 1 })
-    const gameId = await gm.getGameIdByName(name)
-    await ParameterManager.createParams(gameId)
-    await TurnManager.initialize(players, gameId)
+    const game_id = await gm.getGameIdByName(name)
+    await ParameterManager.createParams(game_id)
+    await TurnManager.initialize(players, game_id)
     return game
   }
 }

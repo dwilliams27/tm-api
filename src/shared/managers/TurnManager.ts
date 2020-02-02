@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { Turn } from '../../models/turn'
 import Formatter from '../Formatter'
 import Output from '../Output'
@@ -13,8 +12,8 @@ export default {
     let turnOrder = ''
     players.map(player => { turnOrder += `${player}#` })
     console.log(players[0])
-    await Turn.create({ currentPlayer: players[0], turnOrder })
-    Output.log(`Player ${m(players[0], Output.YELLOW)} turn`)
+    await Turn.create({ currentPlayer: players[0].name, turnOrder })
+    Output.log(`Player ${m(players[0].name, Output.YELLOW)} turn`)
   },
   async getTurnOrder (game_id: number) {
     const turns = await (await Turn.findOne({ where: { game_id } })).turnOrder
@@ -24,6 +23,10 @@ export default {
   async addPlayer (name: string, game_id: number) {
     const curTurnOrder = this.getTurnOrder(game_id)
     return Turn.update<Turn>({ turnOrder: curTurnOrder }, { where: { game_id } })
+  },
+  async isTurn (name: string, game_id: number) {
+    const curPlayer = (await Turn.findOne({ where: { game_id } })).currentPlayer
+    return name === curPlayer
   },
   async passToWho (player: string, generation: number, game_id: number) {
     if (!player || !game_id) {

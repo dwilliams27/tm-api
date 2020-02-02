@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { Table, Model, Column, ForeignKey, BelongsTo } from 'sequelize-typescript'
 import { Game } from './game'
 

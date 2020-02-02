@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { Player } from '../../models/player'
 import Formatter from '../Formatter'
 import Output from '../Output'
