@@ -4,15 +4,18 @@ import { Game } from './game'
 @Table
 export class Turn extends Model<Turn> {
   @Column
-  currentPlayer: string;
+  currentPlayer: string
 
   @Column
-  turnOrder: string;
+  actions: number
+
+  @Column
+  turnOrder: string
 
   @ForeignKey(() => Game)
   @Column
-  game_id: number;
+  game_id: number
 
   @BelongsTo(() => Game)
-  game: Game;
+  game: Game
 }

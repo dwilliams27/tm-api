@@ -11,6 +11,8 @@ export default {
         return `\x1b[93m${message}\x1b[0m`
       case Mods.ORANGE:
         return `\x1b[38;5;214m${message}\x1b[0m`
+      case Mods.BLUE:
+        return `\x1b[34m${message}\x1b[0m`
       case Mods.BOLD:
         return `\x1b[1m${message}\x1b[0m`
       default:

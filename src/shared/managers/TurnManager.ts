@@ -2,6 +2,7 @@ import { Turn } from '../../models/turn'
 import Formatter from '../Formatter'
 import Output from '../Output'
 import { PlayerT } from '../types/PlayerT'
+import { ActionT } from '../types/ActionT'
 const m = Formatter.m
 
 export default {
@@ -26,6 +27,17 @@ export default {
   async isTurn (name: string, game_id: number) {
     const curPlayer = (await Turn.findOne({ where: { game_id } })).currentPlayer
     return name === curPlayer
+  },
+  async takeAction (player: string, action: ActionT, game_id: number) {
+    if (!this.isTurn(player, game_id)) {
+      return { error: `It is not ${m(player, Output.YELLOW)}'s turn` }
+    }
+    const curActions = (await Turn.findOne({ where: { game_id } })).actions
+    if (curActions < 1) {
+      return { error: `Player ${m(player, Output.YELLOW)} is out of actions` }
+    }
+    Output.log(`Action ${m(action, Output.BLUE)} taken by ${m(player, Output.YELLOW)} turn`)
+    return Turn.update<Turn>({ actions: curActions - 1 }, { where: { game_id } })
   },
   async passToWho (player: string, generation: number, game_id: number) {
     if (!player || !game_id) {
